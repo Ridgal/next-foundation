@@ -2,7 +2,15 @@
 import React from "react";
 
 import { useTranslations } from "next-intl";
+import { useRouter, usePathname } from "@/i18n/navigation";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,8 +23,16 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 const Header = () => {
-  const { setTheme, theme } = useTheme();
   const t = useTranslations();
+  const { setTheme, theme } = useTheme();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleLanguageChange = (value: string) => {
+    router.replace("/", { locale: value });
+  };
+
+  console.log(pathname);
 
   return (
     <header className="sticky top-0 z-50 w-screen border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -25,7 +41,17 @@ const Header = () => {
           <span className="text-lg font-semibold">YourLogo</span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
+          <Select value={pathname} onValueChange={handleLanguageChange}>
+            <SelectTrigger className="w-[100px]">
+              <SelectValue placeholder="Select a fruit" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="en">English</SelectItem>
+              <SelectItem value="ru">Русский</SelectItem>
+            </SelectContent>
+          </Select>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="rounded-full">
